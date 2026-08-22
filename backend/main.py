@@ -9,6 +9,9 @@ from summarization import summarize
 
 load_dotenv()
 
+allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+
+
 app = FastAPI(title="Document Summary Assistant API")
     
 app.add_middleware(
