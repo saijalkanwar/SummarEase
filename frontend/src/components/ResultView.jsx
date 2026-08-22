@@ -1,6 +1,6 @@
 function ResultView({ summary, keyPoints }) {
   return (
-  <div className="border border-slate-200 rounded-xl p-6 bg-white">
+  <div>
     <h2 className="text-xs font-semibold uppercase tracking-wide text-amber-600 mb-2">
       Summary
     </h2>
