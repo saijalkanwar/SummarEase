@@ -71,4 +71,8 @@ async def summarize_endpoint(payload: SummarizeRequest):
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
-    return result    
+    return result   
+
+@app.get("/debug-origins")
+def debug_origins():
+    return {"allowed_origins": allowed_origins} 
