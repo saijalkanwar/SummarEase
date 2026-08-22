@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import UploadZone from './components/UploadZone'
 import SummaryOptions from './components/SummaryOptions'
+import ResultView from './components/ResultView'
 
 function App() {
   const [file, setFile] = useState(null)
   const [length, setLength] = useState('medium')
   const [phase, setPhase] = useState('idle') // 'idle' | 'loading' | 'done' | 'error'
   const [error, setError] = useState(null)
+  const [summary, setSummary] = useState('')
+  const [keyPoints, setKeyPoints] = useState([])
 
   function handleGenerate() {
     if (!file) return
@@ -17,9 +20,17 @@ function App() {
     // TEMPORARY: fake async work. We'll replace this with a real API call
     // to FastAPI in Phase 9.
     setTimeout(() => {
-      const fakeSucceeds = false // flip this to false to test the error path
+      const fakeSucceeds = true // flip this to false to test the error path
 
       if (fakeSucceeds) {
+        setSummary(
+          'This is a placeholder summary. Once the backend is connected in Phase 9, this will be the real AI-generated summary of your uploaded document.'
+        )
+        setKeyPoints([
+          'This is placeholder key point one.',
+          'This is placeholder key point two.',
+          'This is placeholder key point three.',
+        ])
         setPhase('done')
       } else {
         setError('Something went wrong while summarizing. Please try again.')
@@ -50,15 +61,9 @@ function App() {
         {isLoading ? 'Generating…' : 'Generate Summary'}
       </button>
 
-      {phase === 'error' && (
-        <p className="mt-4 text-sm text-red-600">{error}</p>
-      )}
+       {phase === 'error' && <p className="mt-4 text-sm text-red-600">{error}</p>}
 
-      {phase === 'done' && (
-        <p className="mt-4 text-sm text-green-600">
-          ✓ Summary generated (this is a placeholder — real results come in Phase 9)
-        </p>
-      )}
+      {phase === 'done' && <ResultView summary={summary} keyPoints={keyPoints} />}
     </div>
   )
 }
