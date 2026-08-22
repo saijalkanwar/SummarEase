@@ -12,10 +12,10 @@ function SummaryOptions({ value, onChange }) {
           key={option.value}
           type="button"
           onClick={() =>onChange(option.value)}
-          className={`px-4 py-2 rounded-md border text-sm font-medium ${
+          className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
             value === option.value
-              ? 'bg-blue-600 text-white border-blue-600'
-              : 'bg-white text-gray-700 border-gray-300'
+              ? 'bg-slate-900 text-white border-slate-900'
+              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
           }`}
         >
           {option.label}
