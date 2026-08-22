@@ -37,8 +37,11 @@ function App() {
   return (
   <div className="max-w-5xl mx-auto mt-16 px-6">
     <header className="mb-10">
-      <p className="text-xs font-semibold uppercase tracking-widest text-amber-600 mb-2">
-        SummarEase - Document Summary Assistant
+      <p className="font-display text-2xl font-bold text-slate-900 tracking-tight">
+        SummarEase
+      </p>
+      <p className="text-xs font-semibold uppercase tracking-widest text-amber-600 mt-1 mb-3">
+          Document Summary Assistant
       </p>
       <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
         Turn any document into a summary
