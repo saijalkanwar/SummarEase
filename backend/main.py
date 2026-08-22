@@ -1,10 +1,16 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from services import extract_pdf_text, extract_image_text
+from summarization import summarize
+
+load_dotenv()
 
 app = FastAPI(title="Document Summary Assistant API")
-
+    
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -12,6 +18,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class SummarizeRequest(BaseModel):
+    text: str
+    length: str = "medium"
+
+
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
@@ -43,4 +55,17 @@ async def extract(file: UploadFile = File(...)):
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     return {"text": text}
-            
+
+
+        
+@app.post("/summarize")
+async def summarize_endpoint(payload: SummarizeRequest):
+    if not payload.text.strip():
+        raise HTTPException(status_code=400, detail="No text provided to summarize.")
+
+    try:
+        result = summarize(payload.text, payload.length)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    return result    
