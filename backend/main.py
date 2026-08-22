@@ -1,6 +1,8 @@
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+from services import extract_pdf_text, extract_image_text
+
 app = FastAPI(title="Document Summary Assistant API")
 
 app.add_middleware(
@@ -31,9 +33,14 @@ async def extract(file: UploadFile = File(...)):
     if not file_bytes:
         raise HTTPException(status_code=400, detail="The uploaded file is empty.")
 
-    # TEMPORARY: just confirm we received the file. Real extraction comes in Phase 6/7.
-    return {
-        "filename": file.filename,
-        "content_type": file.content_type,
-        "size_bytes": len(file_bytes),
-    }
+    
+    try:
+        if file.content_type == "application/pdf":
+            text = extract_pdf_text(file_bytes)
+        else:
+            text = extract_image_text(file_bytes)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    return {"text": text}
+            
